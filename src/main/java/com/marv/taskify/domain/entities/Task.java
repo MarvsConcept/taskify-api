@@ -2,6 +2,7 @@ package com.marv.taskify.domain.entities;
 
 import com.marv.taskify.domain.TaskStatus;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -11,6 +12,11 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "tasks")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
 public class Task {
 
     @Id
