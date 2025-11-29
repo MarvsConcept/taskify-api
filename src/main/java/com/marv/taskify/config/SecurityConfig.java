@@ -43,7 +43,11 @@ public class SecurityConfig {
                     .httpBasic(AbstractHttpConfigurer::disable)
                     .formLogin(AbstractHttpConfigurer::disable)
                     .authorizeHttpRequests(auth-> auth
-                            .requestMatchers( "/api/v1/auth/**").permitAll()
+                            .requestMatchers( "/api/v1/auth/**",
+                                    "/v3/api-docs/**",
+                                    "/swagger-ui.html",
+                                    "/swagger-ui/**"
+                                    ).permitAll()
                             .anyRequest().authenticated()
                     )
                     .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

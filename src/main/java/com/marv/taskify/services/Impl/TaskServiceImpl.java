@@ -16,6 +16,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,6 +37,11 @@ public class TaskServiceImpl implements TaskService {
 
         // Map the incoming Dto to entity
         Task task = taskMapper.toTask(dto);
+
+        // Validate due date (cannot be in the past)
+        if (task.getDueDate() != null && task.getDueDate().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Due date cannot be in the past");
+        }
 
         // Set the owner + default status
         task.setOwner(currentUser);
@@ -110,15 +116,41 @@ public class TaskServiceImpl implements TaskService {
                             new EntityNotFoundException("Task not found or you do not have access"));
         }
 
-        // update fields
+        // keep old status to compare later
+        TaskStatus oldStatus = existingTask.getStatus();
+
+        // update basic fields
         existingTask.setTitle(dto.getTitle());
         existingTask.setDescription(dto.getDescription());
-        if (dto.getStatus() != null) {
-            existingTask.setStatus(dto.getStatus());
-        }
         existingTask.setTags(dto.getTags());
 
-        // save and rturn TaskDetailDto
+        // Validate due date if provided
+        if (dto.getDueDate() != null) {
+            if (dto.getDueDate().isBefore(LocalDateTime.now())) {
+                throw new IllegalArgumentException("Due date cannot be in the past");
+            }
+            existingTask.setDueDate(dto.getDueDate());
+        }
+
+
+        // update status if provided
+        if (dto.getStatus() != null) {
+            TaskStatus newStatus = dto.getStatus();
+            existingTask.setStatus(newStatus);
+
+            // moved into Done
+            if (newStatus == TaskStatus.DONE && oldStatus != TaskStatus.DONE) {
+                existingTask.setCompletedAt(LocalDateTime.now());
+            }
+
+            // moved out of DONE (reopened) – optional but usually what you want
+            if (newStatus != TaskStatus.DONE && oldStatus == TaskStatus.DONE) {
+                existingTask.setCompletedAt(null);
+            }
+
+        }
+
+        // save and return TaskDetailDto
         Task updatedTask = taskRepository.save(existingTask);
         return taskMapper.toTaskDetailDto(updatedTask);
     }
