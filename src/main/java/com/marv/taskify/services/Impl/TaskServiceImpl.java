@@ -122,4 +122,27 @@ public class TaskServiceImpl implements TaskService {
         Task updatedTask = taskRepository.save(existingTask);
         return taskMapper.toTaskDetailDto(updatedTask);
     }
+
+    @Override
+    public void deleteTask(UUID id) {
+
+        // Get current user
+        User currentUser = currentUserService.getCurrentUser();
+
+        Task task;
+
+        // load task based on role (ADMIN vs USER)
+        if (currentUser.getRole() == Role.ADMIN){
+            // admin can delete any task
+            task = taskRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Task not found with Id: " + id));
+        } else {
+            // normal user - only their own tasks
+            task = taskRepository.findByIdAndOwnerId(id, currentUser.getId())
+                    .orElseThrow(() ->
+                            new EntityNotFoundException("Task not found or you do not have access"));
+        }
+
+        taskRepository.delete(task);
+    }
 }
