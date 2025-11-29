@@ -7,6 +7,7 @@ import com.marv.taskify.domain.dtos.UpdateTaskRequestDto;
 import com.marv.taskify.services.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,4 +45,10 @@ public class TaskController {
             ) {
         return taskService.updateTask(id, dto);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTask(
+            @PathVariable UUID id) {
+        taskService.deleteTask(id);
+        return ResponseEntity.noContent().build();
 }
