@@ -7,6 +7,8 @@ import com.marv.taskify.domain.dtos.UpdateTaskRequestDto;
 import com.marv.taskify.services.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,34 +23,38 @@ public class TaskController {
     private final TaskService taskService;
 
     @PostMapping
-    public TaskDetailDto createTask(
+    public ResponseEntity<TaskDetailDto> createTask(
             @Valid @RequestBody CreateTaskRequestDto dto
-            ) {
-        return taskService.createTask(dto);
+    ) {
+        TaskDetailDto created = taskService.createTask(dto);
+        // 201 CREATED with body
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @GetMapping
-    public List<TaskListDto> getAllTasks() {
-        return taskService.getAllTasks();
+    public ResponseEntity<List<TaskListDto>> getAllTasks() {
+        List<TaskListDto> tasks = taskService.getAllTasks();
+        return ResponseEntity.ok(tasks); // 200 OK
     }
 
     @GetMapping("/{id}")
-    public TaskDetailDto getTaskById(@PathVariable UUID id) {
-        return taskService.getTaskById(id);
+    public ResponseEntity<TaskDetailDto> getTaskById(@PathVariable UUID id) {
+        TaskDetailDto task = taskService.getTaskById(id);
+        return ResponseEntity.ok(task); // 200 OK
     }
 
     @PutMapping("/{id}")
-    public TaskDetailDto updateTask(
+    public ResponseEntity<TaskDetailDto> updateTask(
             @PathVariable UUID id,
-            @Valid @RequestBody
-            UpdateTaskRequestDto dto
-            ) {
-        return taskService.updateTask(id, dto);
+            @Valid @RequestBody UpdateTaskRequestDto dto
+    ) {
+        TaskDetailDto updated = taskService.updateTask(id, dto);
+        return ResponseEntity.ok(updated); // 200 OK
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTask(
-            @PathVariable UUID id) {
+    public ResponseEntity<Void> deleteTask(@PathVariable UUID id) {
         taskService.deleteTask(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build(); // 204 NO CONTENT
+    }
 }
