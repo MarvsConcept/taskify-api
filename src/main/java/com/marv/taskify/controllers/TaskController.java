@@ -3,6 +3,7 @@ package com.marv.taskify.controllers;
 import com.marv.taskify.domain.dtos.CreateTaskRequestDto;
 import com.marv.taskify.domain.dtos.TaskDetailDto;
 import com.marv.taskify.domain.dtos.TaskListDto;
+import com.marv.taskify.domain.dtos.UpdateTaskRequestDto;
 import com.marv.taskify.services.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,5 +34,14 @@ public class TaskController {
     @GetMapping("/{id}")
     public TaskDetailDto getTaskById(@PathVariable UUID id) {
         return taskService.getTaskById(id);
+    }
+
+    @PutMapping("/{id}")
+    public TaskDetailDto updateTask(
+            @PathVariable UUID id,
+            @Valid @RequestBody
+            UpdateTaskRequestDto dto
+            ) {
+        return taskService.updateTask(id, dto);
     }
 }
