@@ -1,5 +1,6 @@
 package com.marv.taskify.services;
 
+import com.marv.taskify.domain.TaskStatus;
 import com.marv.taskify.domain.dtos.CreateTaskRequestDto;
 import com.marv.taskify.domain.dtos.TaskDetailDto;
 import com.marv.taskify.domain.dtos.TaskListDto;
@@ -10,7 +11,7 @@ import java.util.UUID;
 
 public interface TaskService {
 
-    List<TaskListDto> getAllTasks();
+    List<TaskListDto> getTasks(TaskStatus status);
 
     TaskDetailDto getTaskById(UUID id);
 

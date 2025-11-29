@@ -57,18 +57,28 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskListDto> getAllTasks() {
+    public List<TaskListDto> getTasks(TaskStatus status) {
 
         // Get current user
         User currentUser = currentUserService.getCurrentUser();
 
-        // Check role before listing the task
         List<Task> tasks;
+
+        // Check role before listing the task
+
         if (currentUser.getRole() == Role.ADMIN) {
             tasks = taskRepository.findAll();
         } else {
             tasks = taskRepository.findByOwnerId(currentUser.getId());
         }
+
+        // If status is provided, filter in-memory
+        if (status != null) {
+            tasks = tasks.stream()
+                    .filter(t -> t.getStatus() == status)
+                    .toList();
+        }
+
         return taskMapper.toTaskListDtos(tasks);
     }
 

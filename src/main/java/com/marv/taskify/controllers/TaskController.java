@@ -1,5 +1,6 @@
 package com.marv.taskify.controllers;
 
+import com.marv.taskify.domain.TaskStatus;
 import com.marv.taskify.domain.dtos.CreateTaskRequestDto;
 import com.marv.taskify.domain.dtos.TaskDetailDto;
 import com.marv.taskify.domain.dtos.TaskListDto;
@@ -32,8 +33,10 @@ public class TaskController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TaskListDto>> getAllTasks() {
-        List<TaskListDto> tasks = taskService.getAllTasks();
+    public ResponseEntity<List<TaskListDto>> getTasks(
+            @RequestParam(required = false) TaskStatus status
+            ) {
+        List<TaskListDto> tasks = taskService.getTasks(status);
         return ResponseEntity.ok(tasks); // 200 OK
     }
 
