@@ -18,20 +18,20 @@ public class OpenApiConfig {
                         .version("v1.0.0"));
     }
 
-    @Bean
-    public GroupedOpenApi authApi() {
-        return GroupedOpenApi.builder()
-                .group("auth")
-                .pathsToMatch("/api/v1/auth/**")
-                .build();
-    }
-
-    @Bean
-    public GroupedOpenApi taskApi() {
-        return GroupedOpenApi.builder()
-                .group("tasks")
-                .pathsToMatch("/api/v1/tasks/**")
-                .build();
-    }
+//    @Bean
+//    public GroupedOpenApi authApi() {
+//        return GroupedOpenApi.builder()
+//                .group("auth")
+//                .pathsToMatch("/api/v1/auth/**")
+//                .build();
+//    }
+//
+//    @Bean
+//    public GroupedOpenApi taskApi() {
+//        return GroupedOpenApi.builder()
+//                .group("tasks")
+//                .pathsToMatch("/api/v1/tasks/**")
+//                .build();
+//    }
 
 }

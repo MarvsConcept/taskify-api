@@ -33,7 +33,7 @@ public class TaskController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TaskListDto>> getTasks(
+    public ResponseEntity<List<TaskListDto>> getAllTasks(
             @RequestParam(required = false) TaskStatus status
             ) {
         List<TaskListDto> tasks = taskService.getTasks(status);
