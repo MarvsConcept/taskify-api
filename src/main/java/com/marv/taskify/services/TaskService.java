@@ -20,4 +20,6 @@ public interface TaskService {
     TaskDetailDto updateTask(UUID id, UpdateTaskRequestDto dto);
 
     void deleteTask(UUID id);
+
+    List<TaskListDto> getTasksForUser(UUID userId);
 }

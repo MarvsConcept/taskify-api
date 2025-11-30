@@ -189,4 +189,11 @@ public class TaskServiceImpl implements TaskService {
 
         taskRepository.delete(task);
     }
+
+
+    public List<TaskListDto> getTasksForUser(UUID userId) {
+        List<Task> tasks = taskRepository.findByOwnerId(userId);
+        return taskMapper.toTaskListDtos(tasks);
+    }
+
 }
