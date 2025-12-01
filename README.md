@@ -1,3 +1,4 @@
+
 # Taskify – Personal Task Manager API
 
 Taskify is a clean and modern RESTful backend built with Spring Boot 3, featuring JWT authentication, role-based access control, and user-owned tasks with validation and business rules.
